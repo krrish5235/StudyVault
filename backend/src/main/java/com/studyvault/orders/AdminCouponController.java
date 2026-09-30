@@ -59,10 +59,11 @@ public class AdminCouponController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public Page<CouponDto> list(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+    public com.studyvault.common.api.ApiResponse<com.studyvault.common.api.PageResponse<CouponDto>> list(
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         Page<Coupon> result = coupons.findAll(PageRequest.of(Math.max(0, page), Math.min(50, Math.max(1, size)),
                 Sort.by(Sort.Direction.DESC, "createdAt")));
-        return result.map(this::toDto);
+        return com.studyvault.common.api.ApiResponse.ok(com.studyvault.common.api.PageResponse.of(result.map(this::toDto)));
     }
 
     @PostMapping
