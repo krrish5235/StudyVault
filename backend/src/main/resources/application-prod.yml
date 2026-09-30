@@ -1,0 +1,8 @@
+logging:
+  level:
+    root: WARN
+    com.studyvault: INFO
+
+app:
+  cookie:
+    secure: ${APP_COOKIE_SECURE:true}
