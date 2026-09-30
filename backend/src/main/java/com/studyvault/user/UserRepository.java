@@ -25,6 +25,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("select count(u) > 0 from User u join u.roles r where r.name = :roleName")
     boolean existsByRoleName(@Param("roleName") String roleName);
 
+    @org.springframework.data.jpa.repository.Query("select u from User u where lower(u.email) like :like or lower(u.fullName) like :like")
+    org.springframework.data.domain.Page<User> search(@Param("like") String like,
+                                                      org.springframework.data.domain.Pageable pageable);
+
     @Modifying
     @Query("update User u set u.failedLoginAttempts = 0, u.lockedUntil = null where u.id = :userId")
     void resetLoginFailures(@Param("userId") UUID userId);
