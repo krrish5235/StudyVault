@@ -80,6 +80,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <div className="grid gap-10 lg:grid-cols-[1fr_380px]">
         <div>
+          {product.coverUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={`${API_URL}${product.coverUrl}`}
+              alt={`${product.title} cover`}
+              className="mb-6 max-h-72 w-full rounded-2xl border border-white/10 object-cover"
+            />
+          )}
           <div className="flex flex-wrap gap-2">
             {product.tags.map((t) => (
               <span key={t} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">

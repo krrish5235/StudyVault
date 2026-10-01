@@ -9,7 +9,7 @@ public record ProductDetailDto(UUID id, String title, String slug, String shortD
                                String categoryName, String categorySlug, java.util.List<String> tags,
                                long priceMinor, Long comparePriceMinor, String currency,
                                BigDecimal avgRating, int reviewCount, String coverImageKey,
-                               int contentVersion, java.time.Instant updatedAt) {
+                               String coverUrl, int contentVersion, java.time.Instant updatedAt) {
 
     public static ProductDetailDto from(Product p) {
         return new ProductDetailDto(p.getId(), p.getTitle(), p.getSlug(), p.getShortDescription(), p.getDescription(),
@@ -17,6 +17,6 @@ public record ProductDetailDto(UUID id, String title, String slug, String shortD
                 p.getTags().stream().map(com.studyvault.catalog.Tag::getName).sorted().toList(),
                 p.getPriceMinor(), p.getComparePriceMinor(), p.getCurrency(),
                 p.getAvgRating(), p.getReviewCount(), p.getCoverImageKey(),
-                p.getContentVersion(), p.getUpdatedAt());
+                ProductSummaryDto.coverUrlOf(p.getCoverImageKey()), p.getContentVersion(), p.getUpdatedAt());
     }
 }

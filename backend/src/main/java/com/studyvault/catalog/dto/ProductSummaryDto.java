@@ -11,13 +11,23 @@ public record ProductSummaryDto(UUID id, String title, String slug, String short
                                 String categoryName, String categorySlug, List<String> tags,
                                 long priceMinor, Long comparePriceMinor, String currency,
                                 boolean featured, boolean bestseller,
-                                BigDecimal avgRating, int reviewCount, String coverImageKey) {
+                                BigDecimal avgRating, int reviewCount, String coverImageKey,
+                                String coverUrl) {
 
     public static ProductSummaryDto from(Product p) {
         return new ProductSummaryDto(p.getId(), p.getTitle(), p.getSlug(), p.getShortDescription(),
                 p.getCategory().getName(), p.getCategory().getSlug(),
                 p.getTags().stream().map(com.studyvault.catalog.Tag::getName).sorted().toList(),
                 p.getPriceMinor(), p.getComparePriceMinor(), p.getCurrency(),
-                p.isFeatured(), p.isBestseller(), p.getAvgRating(), p.getReviewCount(), p.getCoverImageKey());
+                p.isFeatured(), p.isBestseller(), p.getAvgRating(), p.getReviewCount(),
+                p.getCoverImageKey(), coverUrlOf(p.getCoverImageKey()));
+    }
+
+    /** Ready-to-use URL for storefront <img> tags; null when no cover uploaded. */
+    public static String coverUrlOf(String storageKey) {
+        if (storageKey == null || !storageKey.startsWith("public/")) {
+            return null;
+        }
+        return "/api/v1/files/public/" + storageKey.substring("public/".length());
     }
 }

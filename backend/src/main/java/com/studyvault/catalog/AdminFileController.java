@@ -97,11 +97,37 @@ public class AdminFileController {
     }
 
     @GetMapping
-    public List<ProductFileDto> listVersions(@PathVariable UUID productId) {
+    public com.studyvault.common.api.ApiResponse<List<ProductFileDto>> listVersions(@PathVariable UUID productId) {
         requireProduct(productId);
-        return files.findAllByProductIdOrderByVersionDesc(productId).stream()
+        return com.studyvault.common.api.ApiResponse.ok(files.findAllByProductIdOrderByVersionDesc(productId).stream()
                 .map(ProductFileDto::from)
-                .toList();
+                .toList());
+    }
+
+    public record PreviewDto(UUID id, String url, int sortOrder) {
+    }
+
+    @GetMapping("/previews")
+    public com.studyvault.common.api.ApiResponse<List<PreviewDto>> listPreviews(@PathVariable UUID productId) {
+        requireProduct(productId);
+        return com.studyvault.common.api.ApiResponse.ok(previews.findAllByProductIdOrderBySortOrderAsc(productId).stream()
+                .map(p -> new PreviewDto(p.getId(),
+                        com.studyvault.catalog.dto.ProductSummaryDto.coverUrlOf(p.getStorageKey()),
+                        p.getSortOrder()))
+                .toList());
+    }
+
+    @DeleteMapping("/previews/{previewId}")
+    @Transactional
+    public void deletePreview(@PathVariable UUID productId, @PathVariable UUID previewId,
+                              HttpServletRequest httpRequest) {
+        requireProduct(productId);
+        ProductPreview preview = previews.findById(previewId)
+                .filter(p -> p.getProduct().getId().equals(productId))
+                .orElseThrow(() -> new NotFoundException("Preview not found."));
+        storage.delete(preview.getStorageKey());
+        previews.delete(preview);
+        audit.record(httpRequest, "PRODUCT_PREVIEW_DELETED", "product", productId.toString(), java.util.Map.of());
     }
 
     @PostMapping(value = "/cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

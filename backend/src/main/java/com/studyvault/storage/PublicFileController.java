@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
 import java.io.InputStream;
-import java.util.Arrays;
+import java.time.Duration;
 
 /**
- * Serves PUBLIC marketing assets (covers, preview images) from the public/ namespace.
- * Paid files live under private/ and are never reachable through this endpoint.
+ * Serves PUBLIC marketing assets (covers, preview images).
+ * URL contract: GET /api/v1/files/public/{key-without-the-public-prefix}
+ * e.g. storage key "public/products/<id>/cover-x.png" is served at
+ * /api/v1/files/public/products/<id>/cover-x.png.
+ * Anything outside the public namespace (paid files under private/) is never reachable here.
  */
 @RestController
 @RequestMapping("/api/v1/files")
@@ -27,16 +30,21 @@ public class PublicFileController {
 
     @GetMapping("/public/**")
     public ResponseEntity<byte[]> servePublic(jakarta.servlet.http.HttpServletRequest request) {
-        String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
-        String key = path != null ? path.replaceFirst("^/api/v1/files/public/", "") : "";
-        if (!key.startsWith("public/")) {
+        // Extract from the request URI directly - reliable across path matcher strategies.
+        String uri = request.getRequestURI();
+        String prefix = "/api/v1/files/public/";
+        if (uri == null || !uri.startsWith(prefix)) {
             throw new NotFoundException("File not found.");
         }
-        // Defense in depth: only a strict allowlist of public namespaces is servable.
-        String namespace = key.split("/")[1];
-        if (!Arrays.asList("products").contains(namespace)) {
+        String rest = java.net.URLDecoder.decode(uri.substring(prefix.length()), java.nio.charset.StandardCharsets.UTF_8);
+        if (rest.isBlank() || rest.startsWith("/")) {
             throw new NotFoundException("File not found.");
         }
+        // Namespace allowlist - defense in depth against path games.
+        if (!rest.startsWith("products/") || rest.contains("..")) {
+            throw new NotFoundException("File not found.");
+        }
+        String key = "public/" + rest;
         if (!storage.exists(key)) {
             throw new NotFoundException("File not found.");
         }
@@ -46,9 +54,11 @@ public class PublicFileController {
             byte[] data = in.readAllBytes();
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
-                    .cacheControl(CacheControl.maxAge(java.time.Duration.ofDays(7)).cachePublic())
+                    .cacheControl(CacheControl.maxAge(Duration.ofDays(7)).cachePublic())
                     .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(data.length))
                     .body(data);
+        } catch (NotFoundException e) {
+            throw e;
         } catch (Exception e) {
             throw new NotFoundException("File not found.");
         }

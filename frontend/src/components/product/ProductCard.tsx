@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Star, Download, BadgeCheck } from "lucide-react";
 import type { ProductSummary } from "@/lib/types";
+import { API_URL } from "@/lib/api";
 import { formatINR } from "@/lib/format";
 
 export default function ProductCard({ product }: { product: ProductSummary }) {
@@ -10,10 +11,10 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
       className="group glass flex flex-col overflow-hidden rounded-2xl transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1"
     >
       <div className="relative h-40 overflow-hidden bg-gradient-to-br from-ink-700 via-ink-800 to-ink-900">
-        {product.coverImageKey ? (
+        {product.coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={`/api/v1/files/public/${product.coverImageKey}`}
+            src={`${API_URL}${product.coverUrl}`}
             alt={`${product.title} cover`}
             className="h-full w-full object-cover"
             loading="lazy"

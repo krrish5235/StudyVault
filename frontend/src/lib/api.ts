@@ -72,4 +72,63 @@ export const api = {
   patch: <T>(path: string, data?: unknown) =>
     request<T>(path, { method: "PATCH", body: data === undefined ? undefined : JSON.stringify(data) }),
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  /** Multipart file upload with CSRF handling. Returns the parsed JSON body. */
+  upload: async <T>(path: string, file: File): Promise<T> => {
+    const doUpload = async () => {
+      if (!csrfToken) await ensureCsrf();
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch(`${API_URL}${path}`, {
+        method: "POST",
+        credentials: "include",
+        headers: csrfToken ? { "X-XSRF-TOKEN": csrfToken } : {},
+        body,
+      });
+      let parsed: ApiResponse<T> | null = null;
+      try {
+        parsed = (await res.json()) as ApiResponse<T>;
+      } catch {
+        parsed = null;
+      }
+      if (!res.ok || !parsed?.success) {
+        throw new ApiError(res.status, parsed?.message ?? "Upload failed.", parsed?.errors);
+      }
+      return parsed.data;
+    };
+    try {
+      return await doUpload();
+    } catch (err) {
+      // CSRF cookie may have expired - refresh once and retry.
+      if (err instanceof ApiError && err.status === 403) {
+        await ensureCsrf();
+        return doUpload();
+      }
+      throw err;
+    }
+  },
+  /** Raw DELETE/POST/PATCH for endpoints that return non-envelope bodies. */
+  raw: async (path: string, method: "POST" | "PATCH" | "DELETE" = "POST") => {
+    if (!csrfToken) await ensureCsrf();
+    const res = await fetch(`${API_URL}${path}`, {
+      method,
+      credentials: "include",
+      headers: { "X-XSRF-TOKEN": csrfToken ?? "" },
+    });
+    if (!res.ok) {
+      let message = "Request failed.";
+      try {
+        const body = (await res.json()) as ApiResponse<never>;
+        message = body.message ?? message;
+      } catch {
+        /* ignore */
+      }
+      throw new ApiError(res.status, message);
+    }
+    try {
+      const body = (await res.json()) as ApiResponse<never>;
+      return body;
+    } catch {
+      return null;
+    }
+  },
 };

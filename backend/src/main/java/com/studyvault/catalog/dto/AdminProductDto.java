@@ -13,7 +13,8 @@ public record AdminProductDto(UUID id, String title, String slug, String shortDe
                               long priceMinor, Long comparePriceMinor, String currency,
                               Product.Status status, boolean featured, boolean bestseller,
                               BigDecimal avgRating, int reviewCount, long viewCount,
-                              int contentVersion, String coverImageKey, Instant createdAt, Instant updatedAt) {
+                              int contentVersion, String coverImageKey, String coverUrl,
+                              Instant createdAt, Instant updatedAt) {
 
     public static AdminProductDto from(Product p) {
         return new AdminProductDto(p.getId(), p.getTitle(), p.getSlug(), p.getShortDescription(),
@@ -22,6 +23,7 @@ public record AdminProductDto(UUID id, String title, String slug, String shortDe
                 p.getPriceMinor(), p.getComparePriceMinor(), p.getCurrency(),
                 p.getStatus(), p.isFeatured(), p.isBestseller(),
                 p.getAvgRating(), p.getReviewCount(), p.getViewCount(),
-                p.getContentVersion(), p.getCoverImageKey(), p.getCreatedAt(), p.getUpdatedAt());
+                p.getContentVersion(), p.getCoverImageKey(),
+                ProductSummaryDto.coverUrlOf(p.getCoverImageKey()), p.getCreatedAt(), p.getUpdatedAt());
     }
 }

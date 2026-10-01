@@ -35,6 +35,7 @@ export interface ProductSummary {
   avgRating: number;
   reviewCount: number;
   coverImageKey: string | null;
+  coverUrl: string | null;
 }
 
 export interface ProductDetail extends ProductSummary {

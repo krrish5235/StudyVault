@@ -11,7 +11,7 @@ const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline' https://checkout.razorpay.com`,
   `style-src 'self' 'unsafe-inline'`,
-  "img-src 'self' data: blob: https://*.razorpay.com",
+  "img-src 'self' data: blob: https://*.razorpay.com" + (apiUrl ? ` ${apiUrl}` : ""),
   `connect-src 'self' ${apiUrl} https://api.razorpay.com`,
   "frame-src https://api.razorpay.com https://checkout.razorpay.com",
   "font-src 'self' data:",
