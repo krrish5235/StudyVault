@@ -78,6 +78,15 @@ public class User {
         return roles.stream().map(Role::getName).collect(Collectors.toUnmodifiableSet());
     }
 
+    /** Factory for creating accounts outside the persistence package. */
+    public static User register(String email, String fullName, String passwordHash) {
+        User user = new User();
+        user.email = email;
+        user.fullName = fullName;
+        user.passwordHash = passwordHash;
+        return user;
+    }
+
     public boolean isCurrentlyLocked(Instant now) {
         return lockedUntil != null && lockedUntil.isAfter(now);
     }
