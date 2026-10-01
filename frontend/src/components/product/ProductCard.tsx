@@ -8,7 +8,7 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group glass flex flex-col overflow-hidden rounded-2xl transition-transform duration-200 hover:-translate-y-1 focus-visible:-translate-y-1"
+      className="group glass card-glow flex flex-col overflow-hidden rounded-2xl"
     >
       <div className="relative h-40 overflow-hidden bg-gradient-to-br from-ink-700 via-ink-800 to-ink-900">
         {product.coverUrl ? (
@@ -16,7 +16,7 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
           <img
             src={`${API_URL}${product.coverUrl}`}
             alt={`${product.title} cover`}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
         ) : (
@@ -27,6 +27,11 @@ export default function ProductCard({ product }: { product: ProductSummary }) {
           </div>
         )}
         <div className="absolute left-3 top-3 flex gap-2">
+          {product.comparePriceMinor != null && product.comparePriceMinor > product.priceMinor && (
+            <span className="rounded-full bg-mint-400/90 px-2 py-0.5 text-[11px] font-bold text-ink-900">
+              SAVE {Math.round(100 - (product.priceMinor / product.comparePriceMinor) * 100)}%
+            </span>
+          )}
           {product.featured && (
             <span className="flex items-center gap-1 rounded-full bg-gold-500/90 px-2 py-0.5 text-[11px] font-bold text-ink-900">
               <BadgeCheck className="h-3 w-3" aria-hidden /> Featured

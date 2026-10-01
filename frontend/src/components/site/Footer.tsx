@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { BookOpenText } from "lucide-react";
+import { BookOpenText, Code2, ShieldCheck } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/5 py-10">
+    <footer className="relative mt-10 border-t border-white/5 py-12">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-2 font-bold">
@@ -12,6 +12,10 @@ export default function Footer() {
           </div>
           <p className="mt-3 max-w-xs text-sm text-slate-400">
             Built for engineers who take their craft seriously.
+          </p>
+          <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+            <ShieldCheck className="h-3.5 w-3.5 text-mint-400" aria-hidden />
+            All product content is protected — © {new Date().getFullYear()} StudyVault.
           </p>
         </div>
         <nav aria-label="Shop">
@@ -38,9 +42,17 @@ export default function Footer() {
           </ul>
         </nav>
       </div>
-      <p className="mx-auto mt-10 max-w-7xl px-4 text-xs text-slate-500">
-        © {new Date().getFullYear()} StudyVault. All rights reserved.
-      </p>
+
+      <div className="mx-auto mt-10 flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-white/5 px-4 pt-6 text-xs text-slate-500 sm:flex-row">
+        <p>© {new Date().getFullYear()} StudyVault. All rights reserved. Unauthorized copying or redistribution of product content is prohibited.</p>
+        <p className="flex items-center gap-1.5">
+          Designed &amp; developed by
+          <span className="flex items-center gap-1 font-semibold text-slate-300">
+            <Code2 className="h-3.5 w-3.5 text-accent-400" aria-hidden />
+            Krrish
+          </span>
+        </p>
+      </div>
     </footer>
   );
 }

@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   },
   description:
     "Hand-crafted programming notes, e-books and cheat sheets — Java, Spring Boot, SQL, DSA, System Design and more. Written by engineers, for engineers.",
+  authors: [{ name: "Krrish" }],
+  creator: "Krrish",
   openGraph: {
     type: "website",
     siteName: "StudyVault",

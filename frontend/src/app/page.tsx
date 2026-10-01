@@ -31,12 +31,20 @@ export default async function HomePage() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 -z-20" aria-hidden>
+          <div className="blob left-[-10%] top-[10%] h-96 w-96 bg-accent-600" />
+          <div className="blob right-[-5%] top-[40%] h-80 w-80 bg-gold-500" style={{ animationDelay: "-7s" }} />
+        </div>
         <div className="absolute inset-0 -z-10">
           <HeroCanvas />
         </div>
         <div className="mx-auto max-w-7xl px-4 py-28 md:py-36">
           <div className="max-w-2xl">
-            <p className="mb-4 inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-accent-400">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-accent-400">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint-400 opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-mint-400" />
+              </span>
               PREMIUM STUDY MATERIAL · LIFETIME ACCESS
             </p>
             <h1 className="text-4xl font-black leading-tight tracking-tight md:text-6xl">
@@ -51,7 +59,7 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 rounded-xl bg-accent-600 px-6 py-3 font-semibold text-white shadow-lg shadow-accent-600/30 transition hover:bg-accent-500"
+                className="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold text-white"
               >
                 Browse the catalog <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>

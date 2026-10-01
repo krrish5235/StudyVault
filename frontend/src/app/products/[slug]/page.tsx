@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Star, ShieldCheck, FileDown, RefreshCcw } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
+import DescriptionGuard from "@/components/product/DescriptionGuard";
 import BuyPanel from "./BuyPanel";
 import { api, API_URL } from "@/lib/api";
 import { formatINR } from "@/lib/format";
@@ -106,19 +107,30 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </p>
           )}
 
-          <div className="prose prose-invert mt-8 max-w-none text-slate-300">
-            {product.description.split("\n").filter(Boolean).map((para, i) => (
-              <p key={i} className="mb-3 leading-relaxed">{para}</p>
-            ))}
-          </div>
+          <DescriptionGuard>
+            <div className="prose prose-invert mt-8 max-w-none text-slate-300">
+              {product.description.split("\n").filter(Boolean).map((para, i) => (
+                <p key={i} className="mb-3 leading-relaxed">{para}</p>
+              ))}
+            </div>
+            <p className="mt-6 flex items-center gap-1.5 border-t border-white/5 pt-4 text-xs text-slate-500">
+              <ShieldCheck className="h-3.5 w-3.5 text-mint-400" aria-hidden />
+              © {new Date().getFullYear()} StudyVault — original content, all rights reserved. Developed by Krrish.
+            </p>
+          </DescriptionGuard>
         </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="glass rounded-2xl p-6">
+          <div className="glass card-glow rounded-2xl p-6">
             <div className="flex items-baseline gap-3">
               <span className="text-4xl font-black text-white">{formatINR(product.priceMinor)}</span>
               {product.comparePriceMinor != null && product.comparePriceMinor > product.priceMinor && (
                 <span className="text-lg text-slate-500 line-through">{formatINR(product.comparePriceMinor)}</span>
+              )}
+              {product.comparePriceMinor != null && product.comparePriceMinor > product.priceMinor && (
+                <span className="ml-auto rounded-full bg-mint-400/10 px-2.5 py-1 text-xs font-bold text-mint-400">
+                  SAVE {Math.round(100 - (product.priceMinor / product.comparePriceMinor) * 100)}%
+                </span>
               )}
             </div>
             <p className="mt-1 text-xs text-slate-500">
