@@ -7,6 +7,7 @@ import com.studyvault.common.web.ClientIpResolver;
 import com.studyvault.common.web.JsonResponses;
 import com.studyvault.user.SessionService;
 import com.studyvault.oauth.CustomOAuth2UserService;
+import com.studyvault.oauth.CustomOidcUserService;
 import com.studyvault.oauth.OAuthClientConfig;
 import com.studyvault.oauth.OAuthLoginFailureHandler;
 import com.studyvault.oauth.OAuthLoginSuccessHandler;
@@ -44,6 +45,7 @@ public class SecurityConfig {
     private final ClientIpResolver ipResolver;
     private final OAuthClientConfig oauthClientConfig;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
     private final OAuthLoginSuccessHandler oauthSuccessHandler;
     private final OAuthLoginFailureHandler oauthFailureHandler;
 
@@ -102,7 +104,8 @@ public class SecurityConfig {
             chained = http.oauth2Login(login -> login
                     // Deep baseUri so /{registrationId} cannot collide with /providers
                     .authorizationEndpoint(a -> a.baseUri("/api/v1/auth/oauth/authorize"))
-                    .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
+                    .userInfoEndpoint(u -> u.oidcUserService(customOidcUserService)
+                            .userService(customOAuth2UserService))
                     .successHandler(oauthSuccessHandler)
                     .failureHandler(oauthFailureHandler));
         }

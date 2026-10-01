@@ -35,9 +35,24 @@ public class OAuthLoginSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException {
         OAuth2User principal = (OAuth2User) authentication.getPrincipal();
         String provider = (String) principal.getAttributes().get(CustomOAuth2UserService.ATTR_PROVIDER);
-        String providerId = String.valueOf(principal.getAttributes().get(CustomOAuth2UserService.ATTR_PROVIDER_ID));
+        Object providerIdRaw = principal.getAttributes().get(CustomOAuth2UserService.ATTR_PROVIDER_ID);
         String email = (String) principal.getAttributes().get(CustomOAuth2UserService.ATTR_EMAIL);
         String name = (String) principal.getAttributes().get(CustomOAuth2UserService.ATTR_NAME);
+
+        // Defensive fallbacks for raw provider principals.
+        if (authentication.getPrincipal() instanceof org.springframework.security.oauth2.core.oidc.user.OidcUser oidc) {
+            if (email == null) email = oidc.getEmail();
+            if (name == null) name = oidc.getFullName();
+            if (providerIdRaw == null) providerIdRaw = oidc.getSubject();
+            if (provider == null) provider = "google";
+        }
+        if (email == null || provider == null || providerIdRaw == null) {
+            org.slf4j.LoggerFactory.getLogger(OAuthLoginSuccessHandler.class)
+                    .error("OAuth principal missing identity attributes - refusing sign-in.");
+            response.sendRedirect(props.getFrontendUrl() + "/login?error=oauth_failed");
+            return;
+        }
+        String providerId = String.valueOf(providerIdRaw);
 
         try {
             OAuthAccountService.ResolvedUser resolved =

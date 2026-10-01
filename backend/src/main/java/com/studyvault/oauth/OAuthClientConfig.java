@@ -46,6 +46,7 @@ public class OAuthClientConfig {
                     .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
                     .tokenUri("https://oauth2.googleapis.com/token")
                     .userInfoUri("https://openidconnect.googleapis.com/v1/userinfo")
+                    .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
                     .userNameAttributeName("sub")
                     .clientName("Google")
                     .build());
