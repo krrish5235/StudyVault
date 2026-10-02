@@ -17,4 +17,7 @@ public interface PaymentRequestRepository extends JpaRepository<PaymentRequest, 
 
     @EntityGraph(attributePaths = {"order", "order.user"})
     Page<PaymentRequest> findAllByStatusOrderByCreatedAtDesc(PaymentRequest.Status status, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"order", "order.user", "user"})
+    Page<PaymentRequest> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

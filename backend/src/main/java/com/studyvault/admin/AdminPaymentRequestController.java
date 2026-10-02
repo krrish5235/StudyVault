@@ -45,6 +45,7 @@ public class AdminPaymentRequestController {
     }
 
     @GetMapping
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ApiResponse<PageResponse<AdminRequestDto>> list(@RequestParam(required = false) PaymentRequest.Status status,
                                                            @RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "20") int size) {
@@ -52,7 +53,7 @@ public class AdminPaymentRequestController {
                 Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<PaymentRequest> result = (status != null)
                 ? requests.findAllByStatusOrderByCreatedAtDesc(status, pageable)
-                : requests.findAll(pageable);
+                : requests.findAllByOrderByCreatedAtDesc(pageable);
         return ApiResponse.ok(PageResponse.of(result, result.map(this::toDto).getContent()));
     }
 
