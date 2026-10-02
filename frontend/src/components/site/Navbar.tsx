@@ -8,6 +8,7 @@ import { useSession } from "@/components/providers/SessionProvider";
 import { useCart } from "@/components/providers/CartProvider";
 
 const links = [
+  { href: "/dsa-sheet", label: "DSA Sheet" },
   { href: "/products", label: "Catalog" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

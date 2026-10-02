@@ -95,7 +95,7 @@ public class SecurityConfig {
                                 "/api/v1/auth/verify-email").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/payments/webhook/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/**", "/api/v1/categories/**",
-                                "/api/v1/settings/**", "/api/v1/files/public/**").permitAll()
+                                "/api/v1/settings/**", "/api/v1/files/public/**", "/api/v1/dsa-sheet").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 

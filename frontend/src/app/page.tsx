@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Zap, FileDown, Star } from "lucide-react";
+import { ArrowRight, Briefcase, FileDown, ShieldCheck, Target, UserRoundCheck, Zap, Star } from "lucide-react";
 import HeroCanvas from "@/components/three/HeroCanvas";
 import ProductCard from "@/components/product/ProductCard";
 import { api } from "@/lib/api";
@@ -48,29 +48,60 @@ export default async function HomePage() {
               PREMIUM STUDY MATERIAL · LIFETIME ACCESS
             </p>
             <h1 className="text-4xl font-black leading-tight tracking-tight md:text-6xl">
-              <span className="text-gradient">Master the concepts.</span>
+              <span className="text-gradient">Placement-ready.</span>
               <br />
-              Own the interview.
+              Interview-proof.
             </h1>
             <p className="mt-6 max-w-xl text-lg text-slate-300">
-              Hand-crafted programming notes, e-books and cheat sheets — written by
-              engineers, for engineers. Java, Spring Boot, SQL, DSA, System Design and more.
+              Premium notes, a free 150-question FAANG DSA sheet and one-on-one
+              interview prep — everything you need to go from learning to placed,
+              in one portal.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                href="/products"
+                href="/dsa-sheet"
                 className="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold text-white"
               >
-                Browse the catalog <ArrowRight className="h-4 w-4" aria-hidden />
+                Start the DSA 150 sheet <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
               <Link
-                href="/products?sort=rating"
+                href="/products"
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 px-6 py-3 font-semibold text-slate-200 transition hover:bg-white/5"
               >
-                <Star className="h-4 w-4 text-gold-400" aria-hidden /> Top rated
+                <Star className="h-4 w-4 text-gold-400" aria-hidden /> Browse notes
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Placement pillars */}
+      <section className="mx-auto max-w-7xl px-4 py-10" aria-label="What you get">
+        <h2 className="text-center text-2xl font-bold text-white">Your placement, covered end to end</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Link href="/products" className="glass card-glow rounded-2xl p-5">
+            <FileDown className="h-6 w-6 text-accent-400" aria-hidden />
+            <h3 className="mt-3 font-semibold text-white">Notes &amp; e-books</h3>
+            <p className="mt-1 text-sm text-slate-400">Deep, structured notes per subject — versioned and updated.</p>
+          </Link>
+          <Link href="/dsa-sheet" className="glass card-glow rounded-2xl p-5">
+            <Target className="h-6 w-6 text-gold-400" aria-hidden />
+            <span className="mt-3 flex items-center gap-2 font-semibold text-white">
+              FAANG DSA 150
+              <span className="rounded-full bg-mint-400/10 px-2 py-0.5 text-[10px] font-bold text-mint-400">FREE</span>
+            </span>
+            <p className="mt-1 text-sm text-slate-400">Only 150 questions, chosen to cover every FAANG-style interview.</p>
+          </Link>
+          <Link href="/products?category=interview-preparation" className="glass card-glow rounded-2xl p-5">
+            <Briefcase className="h-6 w-6 text-accent-400" aria-hidden />
+            <h3 className="mt-3 font-semibold text-white">Interview resources</h3>
+            <p className="mt-1 text-sm text-slate-400">System design, HR rounds, project answers and cheat sheets.</p>
+          </Link>
+          <Link href="/contact" className="glass card-glow rounded-2xl p-5">
+            <UserRoundCheck className="h-6 w-6 text-mint-400" aria-hidden />
+            <h3 className="mt-3 font-semibold text-white">1:1 interview prep</h3>
+            <p className="mt-1 text-sm text-slate-400">Mock interviews and a personal plan for your target companies.</p>
+          </Link>
         </div>
       </section>
 
