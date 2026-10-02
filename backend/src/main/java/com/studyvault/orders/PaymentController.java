@@ -55,6 +55,7 @@ public class PaymentController {
     }
 
     @GetMapping("/orders")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ApiResponse<List<OrderDto>> myOrders() {
         SecurityUser su = SecurityUtils.requireUser();
         List<OrderDto> list = orders.findAllByUserIdOrderByCreatedAtDesc(su.id()).stream()
@@ -64,6 +65,7 @@ public class PaymentController {
     }
 
     @GetMapping("/orders/{orderNumber}")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ApiResponse<OrderDto> order(@PathVariable String orderNumber) {
         SecurityUser su = SecurityUtils.requireUser();
         Order order = orders.findWithItemsByOrderNumberAndUser(orderNumber, su.id())

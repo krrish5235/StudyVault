@@ -23,9 +23,12 @@ export default function Navbar() {
   const isAdmin = user?.roles.includes("ADMIN");
 
   return (
-    <header className="sticky top-0 z-50 glass">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3" aria-label="Main">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+    <header className="sticky top-0 z-50 px-4 pt-3">
+      <nav
+        className="glass-edge mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3"
+        aria-label="Main"
+      >
+        <Link href="/" className="font-display flex items-center gap-2 text-lg font-bold tracking-tight">
           <BookOpenText className="h-6 w-6 text-accent-400" aria-hidden />
           <span>
             Study<span className="text-accent-400">Vault</span>
@@ -58,11 +61,11 @@ export default function Navbar() {
           {!loading && user ? (
             <>
               {isAdmin && (
-                <Link href="/admin" className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm hover:bg-white/5">
+                <Link href="/admin" className="btn-ghost flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm">
                   <LayoutDashboard className="h-4 w-4" aria-hidden /> Admin
                 </Link>
               )}
-              <Link href="/account" className="rounded-lg bg-accent-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-accent-500">
+              <Link href="/account" className="btn-primary rounded-lg px-4 py-1.5 text-sm font-semibold text-white">
                 {user.fullName.split(" ")[0]}
               </Link>
               <button onClick={() => void logout()} className="text-sm text-slate-300 hover:text-white">
@@ -74,7 +77,7 @@ export default function Navbar() {
               <Link href="/login" className="rounded-lg px-3 py-1.5 text-sm text-slate-200 hover:bg-white/5">
                 Sign in
               </Link>
-              <Link href="/register" className="rounded-lg bg-accent-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-accent-500">
+              <Link href="/register" className="btn-primary rounded-lg px-4 py-1.5 text-sm font-semibold text-white">
                 Create account
               </Link>
             </>
@@ -87,7 +90,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-white/5 px-4 pb-4 md:hidden">
+        <div className="glass-edge mx-auto mt-2 max-w-6xl rounded-2xl px-4 pb-4 md:hidden">
           <div className="flex flex-col gap-3 pt-3">
             {links.map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="text-sm text-slate-200">

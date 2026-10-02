@@ -15,8 +15,10 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     List<Order> findAllByUserIdOrderByCreatedAtDesc(UUID userId);
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"items", "items.product", "user"})
     org.springframework.data.domain.Page<Order> findAllByOrderByCreatedAtDesc(org.springframework.data.domain.Pageable pageable);
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"items", "items.product", "user"})
     org.springframework.data.domain.Page<Order> findAllByStatusOrderByCreatedAtDesc(Order.Status status,
                                                                                      org.springframework.data.domain.Pageable pageable);
 

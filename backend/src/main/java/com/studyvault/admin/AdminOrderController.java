@@ -37,6 +37,7 @@ public class AdminOrderController {
     }
 
     @GetMapping
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ApiResponse<PageResponse<AdminOrderDto>> list(@RequestParam(required = false) Order.Status status,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "20") int size) {
@@ -49,6 +50,7 @@ public class AdminOrderController {
     }
 
     @GetMapping("/{orderNumber}")
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public ApiResponse<AdminOrderDto> detail(@PathVariable String orderNumber) {
         Order order = orders.findByOrderNumber(orderNumber).orElseThrow(() -> new NotFoundException("Order not found."));
         return ApiResponse.ok(toDto(order));

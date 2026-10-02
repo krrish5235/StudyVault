@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { CartProvider } from "@/components/providers/CartProvider";
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -25,8 +29,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="antialiased">
+        <div className="bg-shell" aria-hidden />
+        <div className="grid-overlay" aria-hidden />
         <SessionProvider>
           <CartProvider>
             <Navbar />

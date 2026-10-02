@@ -29,6 +29,7 @@ export default function AdminProductsPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(() => {
@@ -43,6 +44,7 @@ export default function AdminProductsPage() {
   async function create() {
     setBusy(true);
     setError(null);
+    setFieldErrors({});
     try {
       const created = await api.post<AdminProduct>("/api/v1/admin/products", {
         title: form.title,
@@ -60,7 +62,12 @@ export default function AdminProductsPage() {
       // Straight into the product portal to upload the cover and notes file.
       router.push(`/admin/products/${created.id}`);
     } catch (err) {
-      setError(err instanceof ApiError ? `${err.message}${err.fieldErrors ? `: ${Object.values(err.fieldErrors).join(", ")}` : ""}` : "Save failed.");
+      if (err instanceof ApiError && err.fieldErrors) {
+        setFieldErrors(err.fieldErrors);
+        setError(null);
+      } else {
+        setError(err instanceof ApiError ? err.message : "Save failed.");
+      }
     } finally {
       setBusy(false);
     }
@@ -94,22 +101,37 @@ export default function AdminProductsPage() {
           <h2 className="font-semibold text-white">Create product</h2>
           <p className="mt-1 text-xs text-slate-500">Creates a draft — you'll upload the cover and notes file on the next screen.</p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
-            <select value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-              aria-label="Category" className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white">
-              <option value="">Select category…</option>
-              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
-            <input placeholder="Short description (10-300 chars)" value={form.shortDescription}
-              onChange={(e) => setForm({ ...form, shortDescription: e.target.value })}
-              className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white md:col-span-2" />
-            <textarea placeholder="Full description (min 20 chars)" rows={4} value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white md:col-span-2" />
-            <input placeholder="Price in ₹" type="number" min="0" step="0.01" value={form.priceRupees}
-              onChange={(e) => setForm({ ...form, priceRupees: e.target.value })}
-              className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
+            <div>
+              <input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
+              {fieldErrors.title && <p className="mt-1 text-xs text-red-400">{fieldErrors.title}</p>}
+            </div>
+            <div>
+              <select value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+                aria-label="Category" className="w-full rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white">
+                <option value="">Select category…</option>
+                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              {fieldErrors.categoryId && <p className="mt-1 text-xs text-red-400">{fieldErrors.categoryId}</p>}
+            </div>
+            <div className="md:col-span-2">
+              <input placeholder="Short description (10–300 characters, shown on cards)" value={form.shortDescription}
+                onChange={(e) => setForm({ ...form, shortDescription: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
+              {fieldErrors.shortDescription && <p className="mt-1 text-xs text-red-400">{fieldErrors.shortDescription}</p>}
+            </div>
+            <div className="md:col-span-2">
+              <textarea placeholder="Full description (at least 20 characters — the product page content)" rows={4} value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
+              {fieldErrors.description && <p className="mt-1 text-xs text-red-400">{fieldErrors.description}</p>}
+            </div>
+            <div>
+              <input placeholder="Price in ₹" type="number" min="0" step="0.01" value={form.priceRupees}
+                onChange={(e) => setForm({ ...form, priceRupees: e.target.value })}
+                className="w-full rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
+              {fieldErrors.priceMinor && <p className="mt-1 text-xs text-red-400">{fieldErrors.priceMinor}</p>}
+            </div>
             <input placeholder="Compare-at price ₹ (optional)" type="number" min="0" step="0.01" value={form.comparePriceRupees}
               onChange={(e) => setForm({ ...form, comparePriceRupees: e.target.value })}
               className="rounded-xl border border-white/10 bg-ink-800/60 px-4 py-2.5 text-sm text-white" />
