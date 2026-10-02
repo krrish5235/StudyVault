@@ -107,12 +107,16 @@ export const api = {
     }
   },
   /** Raw DELETE/POST/PATCH for endpoints that return non-envelope bodies. */
-  raw: async (path: string, method: "POST" | "PATCH" | "DELETE" = "POST") => {
+  raw: async (path: string, method: "POST" | "PATCH" | "DELETE" = "POST", body?: unknown) => {
     if (!csrfToken) await ensureCsrf();
     const res = await fetch(`${API_URL}${path}`, {
       method,
       credentials: "include",
-      headers: { "X-XSRF-TOKEN": csrfToken ?? "" },
+      headers: {
+        "X-XSRF-TOKEN": csrfToken ?? "",
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
     });
     if (!res.ok) {
       let message = "Request failed.";

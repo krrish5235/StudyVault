@@ -42,6 +42,9 @@ public class AppStartupValidator implements ApplicationRunner {
         if ("mock".equals(props.getPayments().getProvider())) {
             problems.add("PAYMENT_PROVIDER=mock is not allowed in production");
         }
+        if (!List.of("razorpay", "upi", "mock").contains(props.getPayments().getProvider())) {
+            problems.add("PAYMENT_PROVIDER must be one of: razorpay, upi, mock");
+        }
         if ("razorpay".equals(props.getPayments().getProvider())
                 && (isBlank(props.getRazorpay().getKeyId()) || isBlank(props.getRazorpay().getKeySecret()))) {
             problems.add("RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET are required in production");

@@ -123,6 +123,7 @@ public class OrderService {
                 saved.getOrderNumber(),
                 gatewayOrder.id(),
                 gatewayOrder.keyIdForClient(),
+                gateway.provider(),
                 total,
                 saved.getCurrency(),
                 items.stream().map(i -> new CheckoutDto.Item(i.getId(), i.getTitle(), i.getPriceMinor())).toList());
@@ -327,7 +328,7 @@ public class OrderService {
     // ------------------------------------------------------------------ DTO
 
     public record CheckoutDto(String orderNumber, String providerOrderId, String providerKeyId,
-                              long amountMinor, String currency, List<Item> items) {
+                              String provider, long amountMinor, String currency, List<Item> items) {
         public record Item(UUID productId, String title, long priceMinor) {
         }
     }

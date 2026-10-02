@@ -6,11 +6,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "@/components/providers/SessionProvider";
 import {
   LayoutDashboard, Package, ShoppingBag, Users, Ticket, MessageSquareText,
-  ScrollText, Settings, Terminal, Loader2,
+  ScrollText, Settings, Terminal, Loader2, IndianRupee,
 } from "lucide-react";
 
 const nav = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/payments", label: "Payments", icon: IndianRupee },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/admin/users", label: "Users", icon: Users },
