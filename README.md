@@ -1,5 +1,11 @@
 # StudyVault
 
+![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)
+![Java](https://img.shields.io/badge/Java-21-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F.svg)
+![Next.js](https://img.shields.io/badge/Next.js-App%20Router-000000.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791.svg)
+
 A production-grade **digital study-material marketplace** for selling programming and
 educational resources (notes, e-books, cheat sheets, interview prep packs) with real
 payments, secure file delivery, an admin command center, and full operational tooling.
@@ -8,6 +14,20 @@ payments, secure file delivery, an admin command center, and full operational to
 > Security, payment integrity, and authorization are prioritized above visual effects.
 
 ---
+
+## Screenshots
+
+| Marketplace home | Admin command center |
+| :---: | :---: |
+| ![Marketplace home](docs/screenshots/home.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+
+| FAANG DSA 150 sheet | Product catalog |
+| :---: | :---: |
+| ![FAANG DSA 150 sheet](docs/screenshots/dsa-sheet.png) | ![Product catalog](docs/screenshots/catalog.png) |
+
+| Product detail — secure delivery |
+| :---: |
+| ![Product detail](docs/screenshots/product-detail.png) |
 
 ## Stack
 
@@ -108,3 +128,12 @@ Environment variables are documented in [docs/ENVIRONMENT.md](docs/ENVIRONMENT.m
 [ARCHITECTURE](docs/ARCHITECTURE.md) · [SECURITY](docs/SECURITY.md) · [API](docs/API.md) ·
 [DATABASE](docs/DATABASE.md) · [DEPLOYMENT](docs/DEPLOYMENT.md) · [BACKUP](docs/BACKUP.md) ·
 [TESTING](docs/TESTING.md) · [ENVIRONMENT](docs/ENVIRONMENT.md)
+
+## License
+
+Released under the **GNU General Public License v3.0** — see [LICENSE](LICENSE).
+
+You are free to use, study, and modify this code, but any redistributed or derivative
+work must also be licensed under GPL-3.0 (strong copyleft). This license was chosen
+deliberately instead of permissive options like MIT so that the source of any fork
+stays open.
